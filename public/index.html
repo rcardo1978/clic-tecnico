@@ -105,7 +105,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <body>
 <div class="top-bar">
   <div class="logo-mark"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg></div>
-  <div class="top-bar-text"><h1>Clic T&#233;cnico</h1><p>Diagn&#243;stico IA &middot; Clic Reparaci&#243;n</p></div>
+  <div class="top-bar-text"><h1>Clic Técnico</h1><p>Diagnóstico IA · Clic Reparación</p></div>
   <div class="online-dot"></div><span class="online-label">Online</span>
 </div>
 <div class="chat-wrap">
@@ -117,17 +117,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <div class="welcome-card">
           <div class="welcome-header">
             <div class="avatar"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg></div>
-            <div><h2>Hola, soy Clic T&#233;cnico &#128075;</h2><p>Asistente t&#233;cnico de Clic Reparaci&#243;n &middot; 24/7</p></div>
+            <div><h2>Hola, soy Clic Técnico 👋</h2><p>Asistente técnico de Clic Reparación · 24/7</p></div>
           </div>
-          <div class="welcome-body">Cu&#233;ntame qu&#233; le pasa a tu electrodom&#233;stico. Puedes escribir o <strong>subir fotos y v&#237;deos</strong> del fallo.<br><br>Reparamos <strong>lavadoras, lavavajillas, frigor&#237;ficos, hornos, secadoras, calderas y aires acondicionados split y por conductos</strong> en toda Espa&#241;a.</div>
+          <div class="welcome-body">Cuéntame qué le pasa a tu electrodoméstico. Puedes escribir o <strong>subir fotos y vídeos</strong> del fallo.<br><br>Reparamos <strong>lavadoras, lavavajillas, frigoríficos, hornos, secadoras, calderas y aires acondicionados split y por conductos</strong> en toda España.</div>
           <div class="quick-chips" id="quick-chips">
-            <div class="chip" onclick="sendChip(this)">&#129527; Mi lavadora hace ruido</div>
-            <div class="chip" onclick="sendChip(this)">&#10052;&#65039; El frigo no enfr&#237;a</div>
-            <div class="chip" onclick="sendChip(this)">&#128167; Lavavajillas pierde agua</div>
-            <div class="chip" onclick="sendChip(this)">&#128293; El horno no calienta</div>
-            <div class="chip" onclick="sendChip(this)">&#127777;&#65039; La caldera no enciende</div>
-            <div class="chip" onclick="sendChip(this)">&#128168; La secadora no seca</div>
-            <div class="chip" onclick="sendChip(this)">&#10052;&#65039; El aire split no enfr&#237;a</div>
+            <div class="chip" onclick="sendChip(this)">🫧 Mi lavadora hace ruido</div>
+            <div class="chip" onclick="sendChip(this)">❄️ El frigo no enfría</div>
+            <div class="chip" onclick="sendChip(this)">💧 Lavavajillas pierde agua</div>
+            <div class="chip" onclick="sendChip(this)">🔥 El horno no calienta</div>
+            <div class="chip" onclick="sendChip(this)">🌡️ La caldera no enciende</div>
+            <div class="chip" onclick="sendChip(this)">💨 La secadora no seca</div>
+            <div class="chip" onclick="sendChip(this)">❄️ El aire split no enfría</div>
           </div>
         </div>
       </div>
@@ -138,38 +138,38 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="input-inner">
     <div class="attach-previews" id="attach-previews"></div>
     <div class="input-row">
-      <button class="attach-btn" onclick="document.getElementById('file-input').click()" title="Adjuntar foto o v&#237;deo"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></button>
-      <textarea class="msg-input" id="msg-input" rows="1" placeholder="Describe el problema o sube una foto/v&#237;deo..." oninput="autoResize(this)" onkeydown="handleKey(event)"></textarea>
+      <button class="attach-btn" onclick="document.getElementById('file-input').click()" title="Adjuntar foto o vídeo"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></button>
+      <textarea class="msg-input" id="msg-input" rows="1" placeholder="Describe el problema o sube una foto/vídeo..." oninput="autoResize(this)" onkeydown="handleKey(event)"></textarea>
       <button class="send-btn" onclick="sendMessage()"><svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
     </div>
-    <div class="hint">Soporta JPG, PNG, MP4, MOV &middot; m&#225;x. 20MB</div>
+    <div class="hint">Soporta JPG, PNG, MP4, MOV · máx. 20MB</div>
   </div>
 </div>
 <input type="file" id="file-input" accept="image/*,video/*" multiple onchange="handleFiles(event)">
 <script>
-var WA = '34629245180';
-var SYS = 'Eres "Clic Tecnico", el asistente tecnico de Clic Reparacion, empresa espanola de reparacion de electrodomesticos a domicilio. Operamos en toda Espana, de lunes a domingo de 8:00 a 20:00.\n\nSERVICIOS que reparamos:\n- Lavadoras, Lavavajillas, Frigorificos, Hornos, Secadoras, Calderas, Aire acondicionado split y por conductos\n\nNO reparamos: aire acondicionado portatil, microondas, televisores, pequenos electrodomesticos.\n\nSi preguntan por aire acondicionado pregunta si es split/conductos (si reparamos) o portatil (no).\nNUNCA des precios. Si preguntan di que el tecnico lo valora en la visita.\nNUNCA des el telefono ni la web salvo que el usuario lo pida expresamente despues de haberle mostrado el formulario.\n\nFLUJO:\n1. Escucha el problema y entra en modo diagnostico\n2. Haz maximo 2-3 preguntas: marca/modelo, antiguedad, sintoma concreto\n3. Da un diagnostico claro: causa probable, 2-3 cosas a probar en casa, si necesita tecnico\n4. Cuando el usuario pida un tecnico o quiera contactar, responde UNA frase corta y escribe al final exactamente: [SHOW_FORM]\n\nCUANDO MOSTRAR FORMULARIO: si el usuario dice "quiero un tecnico", "mandame un tecnico", "quiero que me llamen", "como os contacto", "pasadme con alguien" o similar -> responde una frase + [SHOW_FORM]\n\nCONOCIMIENTO: Conoces todos los codigos de error (E01, F21, E3, dE, 5E, etc) y sintomas de todas las marcas: Bosch, Siemens, Balay, Samsung, LG, Whirlpool, Miele, AEG, Electrolux, Haier, Zanussi, Indesit, Beko, Candy, Ariston, Fagor, Teka, Junkers, Roca, Vaillant, Saunier Duval, Daikin, Mitsubishi, Fujitsu, Toshiba, Panasonic.\n\nPERSONALIDAD: Eres como el mejor tecnico de Espana al telefono: cercano, directo, competente. Nunca uses frases genericas. Si hay riesgo de gas o electrico avisas con claridad.\n\nFOTOS: Si el usuario no ha subido fotos y ayudarian al diagnostico, pidellas de forma natural.\n\nFORMATO: Cuando tengas diagnostico claro incluye al final:\n[DIAG_START]\n{"titulo":"titulo","severidad":"baja|media|alta","causa":"causa en 1-2 frases","advertencia":null,"soluciones":["paso 1","paso 2","paso 3"],"necesita_tecnico":"veredicto sin precio","youtube_query":"busqueda youtube especifica en espanol"}\n[DIAG_END]\n\nIdioma: siempre espanol de Espana.';
+var WA='34629245180';
+var SYS='Eres Clic Tecnico, el asistente tecnico de Clic Reparacion, empresa espanola de reparacion de electrodomesticos a domicilio. Operamos en toda Espana, de lunes a domingo de 8:00 a 20:00.\n\nSERVICIOS que reparamos: Lavadoras, Lavavajillas, Frigorificos, Hornos, Secadoras, Calderas, Aire acondicionado split y por conductos.\n\nNO reparamos: aire acondicionado portatil, microondas, televisores, pequenos electrodomesticos. Si preguntan por aire acondicionado pregunta si es split o portatil.\n\nNUNCA des precios. NUNCA des el telefono ni la web salvo que el usuario lo pida expresamente.\n\nFLUJO:\n1. Escucha el problema y entra en modo diagnostico.\n2. Haz maximo 2-3 preguntas: marca y modelo, antiguedad, sintoma concreto.\n3. Da un diagnostico claro: causa probable, 2-3 cosas a probar en casa, si necesita tecnico.\n4. Cuando el usuario pida un tecnico o quiera contactar, responde UNA frase corta y escribe al final exactamente esto: SHOWFORM\n\nCUANDO PONER SHOWFORM: si el usuario dice quiero un tecnico, mandame un tecnico, quiero que me llamen, como os contacto, pasadme con alguien, quiero que vengais.\n\nCONOCIMIENTO: Conoces todos los codigos de error E01 F21 E3 dE 5E etc y sintomas de Bosch Siemens Balay Samsung LG Whirlpool Miele AEG Electrolux Haier Zanussi Indesit Beko Candy Ariston Fagor Teka Junkers Roca Vaillant Saunier Duval Daikin Mitsubishi Fujitsu Toshiba Panasonic.\n\nPERSONALIDAD: Eres como el mejor tecnico de Espana al telefono: cercano directo competente. Nunca uses frases genericas. Si hay riesgo de gas o electrico avisas con claridad.\n\nFOTOS: Si el usuario no ha subido fotos y ayudarian al diagnostico, pidellas de forma natural.\n\nFORMATO: Cuando tengas diagnostico claro incluye al final:\nDIAGSTART\n{"titulo":"titulo","severidad":"baja o media o alta","causa":"causa en 1-2 frases","advertencia":null,"soluciones":["paso 1","paso 2","paso 3"],"necesita_tecnico":"veredicto sin precio","youtube_query":"busqueda youtube en espanol"}\nDIAGEND\n\nIdioma: siempre espanol de Espana.';
 
-var history = [];
-var pendingFiles = [];
-var isThinking = false;
+var history=[];
+var pendingFiles=[];
+var isThinking=false;
 
 function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,120)+'px';}
 function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage();}}
 
 function handleFiles(e){
   Array.from(e.target.files).forEach(function(f){
-    if(f.size>20*1024*1024){alert('Archivo demasiado grande (max. 20MB)');return;}
-    var reader=new FileReader();
-    reader.onload=function(ev){pendingFiles.push({name:f.name,type:f.type,dataUrl:ev.target.result,isVideo:f.type.startsWith('video/')});renderPreviews();};
-    reader.readAsDataURL(f);
+    if(f.size>20*1024*1024){alert('Archivo demasiado grande');return;}
+    var r=new FileReader();
+    r.onload=function(ev){pendingFiles.push({name:f.name,type:f.type,dataUrl:ev.target.result,isVideo:f.type.startsWith('video/')});renderPreviews();};
+    r.readAsDataURL(f);
   });
   e.target.value='';
 }
 
 function renderPreviews(){
   document.getElementById('attach-previews').innerHTML=pendingFiles.map(function(f,i){
-    return '<div class="attach-thumb">'+(f.isVideo?'<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#f3f4f6;font-size:9px;color:#6B7280;">Video</div>':'<img src="'+f.dataUrl+'">')+'<div class="remove-thumb" onclick="removeFile('+i+')">x</div></div>';
+    return '<div class="attach-thumb">'+(f.isVideo?'<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#f3f4f6;font-size:9px;">Video</div>':'<img src="'+f.dataUrl+'">')+'<div class="remove-thumb" onclick="removeFile('+i+')">x</div></div>';
   }).join('');
 }
 
@@ -181,14 +181,14 @@ function sendChip(el){
   sendMessage(text);
 }
 
-function sendMessage(overrideText){
+function sendMessage(ov){
   if(isThinking)return;
-  var input=document.getElementById('msg-input');
-  var text=overrideText||input.value.trim();
+  var inp=document.getElementById('msg-input');
+  var text=ov||inp.value.trim();
   if(!text&&!pendingFiles.length)return;
   var files=pendingFiles.slice();
   pendingFiles=[];renderPreviews();
-  if(!overrideText){input.value='';input.style.height='auto';}
+  if(!ov){inp.value='';inp.style.height='auto';}
   addUserMsg(text,files);
   history.push({role:'user',content:buildContent(text,files)});
   isThinking=true;
@@ -209,7 +209,7 @@ function buildContent(text,files){
   if(!files.length)return text||' ';
   var parts=[];
   files.forEach(function(f){
-    if(f.isVideo)parts.push({type:'text',text:'[Video adjunto: '+f.name+']'});
+    if(f.isVideo)parts.push({type:'text',text:'Video adjunto: '+f.name});
     else parts.push({type:'image',source:{type:'base64',media_type:f.type||'image/jpeg',data:f.dataUrl.split(',')[1]}});
   });
   parts.push({type:'text',text:text||'Analiza esta imagen.'});
@@ -217,18 +217,18 @@ function buildContent(text,files){
 }
 
 function renderResponse(raw){
-  var showForm=raw.indexOf('[SHOW_FORM]')!==-1;
-  var diagMatch=raw.match(/\[DIAG_START\]([\s\S]*?)\[DIAG_END\]/);
-  var prose=raw.replace(/\[DIAG_START\][\s\S]*?\[DIAG_END\]/g,'').replace(/\[SHOW_FORM\]/g,'').trim();
+  var showForm=raw.indexOf('SHOWFORM')!==-1;
+  var dm=raw.match(/DIAGSTART([\s\S]*?)DIAGEND/);
+  var prose=raw.replace(/DIAGSTART[\s\S]*?DIAGEND/g,'').replace(/SHOWFORM/g,'').trim();
   if(prose)addBotBubble(fmt(prose));
-  if(diagMatch){
+  if(dm){
     try{
-      var card=JSON.parse(diagMatch[1].trim());
+      var card=JSON.parse(dm[1].trim());
       addDiagCard(card);
       if(card.youtube_query)addYTCard(card.youtube_query,card.titulo);
     }catch(e){}
   }
-  if(showForm&&!diagMatch)showLeadForm(null);
+  if(showForm&&!dm)showLeadForm();
 }
 
 function fmt(t){
@@ -243,7 +243,6 @@ function addTyping(){
   document.getElementById('messages').appendChild(row);scrollB();return id;
 }
 function removeTyping(id){var el=document.getElementById(id);if(el)el.remove();}
-
 function av(){return '<div class="msg-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg></div>';}
 
 function addBotBubble(html){
@@ -271,7 +270,7 @@ function addDiagCard(c){
   var sm={baja:['sev-low','Fallo leve'],media:['sev-mid','Fallo moderado'],alta:['sev-high','Fallo grave']};
   var sv=sm[c.severidad]||sm.media;
   var sols=(c.soluciones||[]).map(function(s){return '<div class="sol-item"><div class="sol-dot"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div><span>'+esc(s)+'</span></div>';}).join('');
-  var warn=c.advertencia?'<div class="warn-strip"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>'+esc(c.advertencia)+'</div>':'';
+  var warn=c.advertencia?'<div class="warn-strip"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/></svg>'+esc(c.advertencia)+'</div>':'';
   var fid='f'+Date.now();
   var row=document.createElement('div');row.className='msg-row';
   row.innerHTML=av()+'<div class="diag-card" style="max-width:88%;flex:1"><div class="diag-head"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span class="diag-head-title">'+esc(c.titulo)+'</span><span class="sev '+sv[0]+'">'+sv[1]+'</span></div><div class="diag-body"><div><div class="diag-section-title">Causa probable</div><div class="diag-text">'+esc(c.causa)+'</div></div>'+warn+'<div><div class="diag-section-title">Prueba esto</div>'+sols+'</div><div><div class="diag-section-title">Necesita tecnico?</div><div class="diag-text">'+esc(c.necesita_tecnico)+'</div></div></div>'+buildForm(fid,c)+'</div>';
@@ -279,31 +278,31 @@ function addDiagCard(c){
 }
 
 function buildForm(fid,c){
-  var cd=c?JSON.stringify(c).replace(/\\/g,'\\\\').replace(/'/g,"\\'"):'null';
-  return '<div class="lead-form" id="'+fid+'"><div class="lead-form-title">Solicitar tecnico</div><div class="lead-form-sub">Dejanos tus datos y te contactamos en menos de 2 horas.</div><div class="form-field"><label>Nombre</label><input type="text" id="'+fid+'-n" placeholder="Tu nombre completo"></div><div class="form-field"><label>Telefono</label><input type="tel" id="'+fid+'-t" placeholder="612 345 678"></div><div class="form-field"><label>Direccion</label><input type="text" id="'+fid+'-d" placeholder="Calle, numero, ciudad"></div><button class="submit-btn" onclick="doSubmit(\''+fid+'\',\''+cd+'\')"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 012 1.18 2 2 0 014 1h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 8.91a16 16 0 006.23 6.23l1.22-1.22a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg>Solicitar tecnico</button><div class="privacy-note">Tus datos solo se usan para gestionar tu reparacion</div></div>';
+  var cj=c?encodeURIComponent(JSON.stringify(c)):'';
+  return '<div class="lead-form" id="'+fid+'"><div class="lead-form-title">Solicitar tecnico</div><div class="lead-form-sub">Dejanos tus datos y te contactamos en menos de 2 horas.</div><div class="form-field"><label>Nombre</label><input type="text" id="'+fid+'-n" placeholder="Tu nombre completo"></div><div class="form-field"><label>Telefono</label><input type="tel" id="'+fid+'-t" placeholder="612 345 678"></div><div class="form-field"><label>Direccion</label><input type="text" id="'+fid+'-d" placeholder="Calle, numero, ciudad"></div><button class="submit-btn" onclick="doSubmit(\''+fid+'\',\''+cj+'\')"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 012 1.18 2 2 0 014 1h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 8.91a16 16 0 006.23 6.23l1.22-1.22a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg>Solicitar tecnico</button><div class="privacy-note">Tus datos solo se usan para gestionar tu reparacion</div></div>';
 }
 
-function showLeadForm(c){
+function showLeadForm(){
   var fid='f'+Date.now();
   var row=document.createElement('div');row.className='msg-row';
-  row.innerHTML=av()+'<div class="diag-card" style="max-width:88%;flex:1">'+buildForm(fid,c)+'</div>';
+  row.innerHTML=av()+'<div class="diag-card" style="max-width:88%;flex:1">'+buildForm(fid,null)+'</div>';
   document.getElementById('messages').appendChild(row);scrollB();
 }
 
-function doSubmit(fid,cStr){
+function doSubmit(fid,cj){
   var nombre=document.getElementById(fid+'-n').value.trim();
   var tel=document.getElementById(fid+'-t').value.trim();
   var dir=document.getElementById(fid+'-d').value.trim();
   if(!nombre||!tel){alert('Introduce tu nombre y telefono.');return;}
-  var c=null;try{c=JSON.parse(cStr);}catch(e){}
+  var c=null;try{c=JSON.parse(decodeURIComponent(cj));}catch(e){}
   var msg='Nueva solicitud de reparacion\n\nCliente: '+nombre+'\nTelefono: '+tel+'\nDireccion: '+(dir||'No indicada');
-  if(c)msg+='\n\nDiagnostico: '+c.titulo+'\nSeveridad: '+c.severidad+'\nCausa: '+c.causa+'\nNecesita tecnico: '+c.necesita_tecnico;
+  if(c)msg+='\n\nDiagnostico: '+c.titulo+'\nCausa: '+c.causa+'\nNecesita tecnico: '+c.necesita_tecnico;
   var waUrl='https://wa.me/'+WA+'?text='+encodeURIComponent(msg);
   var leads=[];try{leads=JSON.parse(localStorage.getItem('clic_leads')||'[]');}catch(e){}
-  leads.push({fecha:new Date().toISOString(),nombre:nombre,telefono:tel,direccion:dir,diagnostico:c?c.titulo:''});
+  leads.push({fecha:new Date().toISOString(),nombre:nombre,telefono:tel,direccion:dir});
   try{localStorage.setItem('clic_leads',JSON.stringify(leads));}catch(e){}
   var el=document.getElementById(fid);
-  el.innerHTML='<div class="success-card"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><h3>Solicitud enviada!</h3><p>Un tecnico te llamara en menos de 2 horas al <strong>'+esc(tel)+'</strong>.</p><a href="'+waUrl+'" target="_blank" class="wa-btn">Abrir WhatsApp</a></div>';
+  el.innerHTML='<div class="success-card"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><h3>Solicitud enviada!</h3><p>Un tecnico te llamara hoy al <strong>'+esc(tel)+'</strong>.</p><a href="'+waUrl+'" target="_blank" class="wa-btn">Abrir WhatsApp</a></div>';
   scrollB();
 }
 
