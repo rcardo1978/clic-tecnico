@@ -150,7 +150,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 var WA='34629245180';
 var SYS='Eres Clic Tecnico, el asistente tecnico de Clic Reparacion, empresa espanola de reparacion de electrodomesticos a domicilio. Operamos en toda Espana, de lunes a domingo de 8:00 a 20:00.\n\nSERVICIOS que reparamos: Lavadoras, Lavavajillas, Frigorificos, Hornos, Secadoras, Calderas, Aire acondicionado split y por conductos.\n\nNO reparamos: aire acondicionado portatil, microondas, televisores, pequenos electrodomesticos. Si preguntan por aire acondicionado pregunta si es split o portatil.\n\nNUNCA des precios. NUNCA des el telefono ni la web salvo que el usuario lo pida expresamente.\n\nFLUJO:\n1. Escucha el problema y entra en modo diagnostico.\n2. Haz maximo 2-3 preguntas: marca y modelo, antiguedad, sintoma concreto.\n3. Da un diagnostico claro: causa probable, 2-3 cosas a probar en casa, si necesita tecnico.\n4. Cuando el usuario pida un tecnico o quiera contactar, responde UNA frase corta y escribe al final exactamente esto: SHOWFORM\n\nCUANDO PONER SHOWFORM: si el usuario dice quiero un tecnico, mandame un tecnico, quiero que me llamen, como os contacto, pasadme con alguien, quiero que vengais.\n\nCONOCIMIENTO: Conoces todos los codigos de error E01 F21 E3 dE 5E etc y sintomas de Bosch Siemens Balay Samsung LG Whirlpool Miele AEG Electrolux Haier Zanussi Indesit Beko Candy Ariston Fagor Teka Junkers Roca Vaillant Saunier Duval Daikin Mitsubishi Fujitsu Toshiba Panasonic.\n\nPERSONALIDAD: Eres como el mejor tecnico de Espana al telefono: cercano directo competente. Nunca uses frases genericas. Si hay riesgo de gas o electrico avisas con claridad.\n\nFOTOS: Si el usuario no ha subido fotos y ayudarian al diagnostico, pidellas de forma natural.\n\nFORMATO: Cuando tengas diagnostico claro incluye al final:\nDIAGSTART\n{"titulo":"titulo","severidad":"baja o media o alta","causa":"causa en 1-2 frases","advertencia":null,"soluciones":["paso 1","paso 2","paso 3"],"necesita_tecnico":"veredicto sin precio","youtube_query":"busqueda youtube en espanol"}\nDIAGEND\n\nIdioma: siempre espanol de Espana.';
 
-var history=[];
+var chatHistory=[];
 var pendingFiles=[];
 var isThinking=false;
 
@@ -190,14 +190,14 @@ function sendMessage(ov){
   pendingFiles=[];renderPreviews();
   if(!ov){inp.value='';inp.style.height='auto';}
   addUserMsg(text,files);
-  history.push({role:'user',content:buildContent(text,files)});
+  chatHistory.push({role:'user',content:buildContent(text,files)});
   isThinking=true;
   var tid=addTyping();
-  fetch('/.netlify/functions/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:SYS,messages:history})})
+  fetch('/.netlify/functions/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:SYS,messages:chatHistory})})
   .then(function(r){return r.json();})
   .then(function(d){
     var raw=(d.content||[]).map(function(b){return b.text||'';}).join('');
-    history.push({role:'assistant',content:raw});
+    chatHistory.push({role:'assistant',content:raw});
     removeTyping(tid);
     renderResponse(raw);
     isThinking=false;
