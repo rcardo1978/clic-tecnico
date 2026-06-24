@@ -237,6 +237,12 @@ CÓMO DEBES COMPORTARTE — FLUJO DE CONVERSACIÓN:
    "Si quieres que te enviemos un técnico, rellena el formulario de abajo y te contactamos hoy mismo."
    NO des el teléfono proactivamente — el formulario captura los datos. Solo da el teléfono si el usuario lo pide expresamente.
 
+IMPORTANTE — FORMULARIO DE CONTACTO:
+Cuando el usuario pida un técnico, quiera que le llamen, o quiera dejar sus datos (frases como "quiero un técnico", "mándame un técnico", "quiero que me llamen", "cómo os contacto", "pasadme con un técnico"), responde con un mensaje corto y amable Y añade al final esta etiqueta exacta:
+<<<SHOW_FORM>>>
+Ejemplo: "Perfecto, rellena el formulario y te llamamos hoy mismo. <<<SHOW_FORM>>>"
+No des el teléfono ni enlaces externos — el formulario lo gestiona todo.
+
 CONOCIMIENTO TÉCNICO:
 - Conoces todos los códigos de error por marca y modelo (E01, F21, E3, dE, 5E, F06, EA, H6, etc.)
 - Causas frecuentes por electrodoméstico, marca y antigüedad
@@ -390,8 +396,12 @@ function appendTyping() {
 function removeTyping(id) { document.getElementById(id)?.remove(); }
 
 function renderBotResponse(raw) {
+  const showForm = raw.includes('<<<SHOW_FORM>>>');
   const m = raw.match(/<<<DIAG_CARD>>>([\s\S]*?)<<<END_DIAG>>>/);
-  const prose = raw.replace(/<<<DIAG_CARD>>>[\s\S]*?<<<END_DIAG>>>/g, '').trim();
+  let prose = raw
+    .replace(/<<<DIAG_CARD>>>[\s\S]*?<<<END_DIAG>>>/g, '')
+    .replace(/<<<SHOW_FORM>>>/g, '')
+    .trim();
   if (prose) appendBotBubble(formatProse(prose));
   if (m) {
     try {
@@ -401,6 +411,32 @@ function renderBotResponse(raw) {
       if (card.youtube_query) appendYouTubeCard(card.youtube_query, card.titulo);
     } catch(e) {}
   }
+  if (showForm && !m) {
+    showStandaloneForm();
+  }
+}
+
+function showStandaloneForm() {
+  const formId = 'form-' + Date.now();
+  const row = document.createElement('div');
+  row.className = 'msg-row';
+  row.innerHTML =
+    '<div class="msg-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg></div>' +
+    '<div class="diag-card" style="max-width:88%;flex:1">' +
+    '<div class="lead-form" id="' + formId + '">' +
+    '<div class="lead-form-title">📋 Solicitar técnico</div>' +
+    '<div class="lead-form-sub">Déjanos tus datos y te contactamos en menos de 2 horas.</div>' +
+    '<div class="form-field"><label>Nombre</label><input type="text" id="' + formId + '-nombre" placeholder="Tu nombre completo"></div>' +
+    '<div class="form-field"><label>Teléfono</label><input type="tel" id="' + formId + '-telefono" placeholder="612 345 678"></div>' +
+    '<div class="form-field"><label>Dirección</label><input type="text" id="' + formId + '-direccion" placeholder="Calle, número, ciudad"></div>' +
+    '<div class="form-field"><label>¿Qué aparato necesita reparación?</label><input type="text" id="' + formId + '-aparato" placeholder="Ej: lavadora Bosch, frigorífico Samsung..."></div>' +
+    '<button class="submit-btn" onclick="submitLead('' + formId + '', null)">' +
+    '<svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 012 1.18 2 2 0 014 1h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 8.91a16 16 0 006.23 6.23l1.22-1.22a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg>' +
+    'Solicitar técnico</button>' +
+    '<div class="privacy-note">🔒 Tus datos solo se usan para gestionar tu reparación</div>' +
+    '</div></div>';
+  document.getElementById('messages').appendChild(row);
+  scrollBottom();
 }
 
 function appendYouTubeCard(query, titulo) {
@@ -514,6 +550,8 @@ function submitLead(formId, diag) {
   const nombre = document.getElementById(formId + '-nombre').value.trim();
   const telefono = document.getElementById(formId + '-telefono').value.trim();
   const direccion = document.getElementById(formId + '-direccion').value.trim();
+  const aparatoEl = document.getElementById(formId + '-aparato');
+  const aparato = aparatoEl ? aparatoEl.value.trim() : '';
 
   if (!nombre || !telefono) {
     alert('Por favor, introduce al menos tu nombre y teléfono.');
@@ -524,28 +562,35 @@ function submitLead(formId, diag) {
   const lead = {
     fecha: new Date().toISOString(),
     nombre, telefono, direccion,
-    diagnostico: diag.titulo,
-    severidad: diag.severidad,
-    descripcion: diag.causa,
-    necesita_tecnico: diag.necesita_tecnico
+    diagnostico: diag ? diag.titulo : aparato,
+    severidad: diag ? diag.severidad : 'sin diagnóstico',
+    descripcion: diag ? diag.causa : aparato,
+    necesita_tecnico: diag ? diag.necesita_tecnico : 'solicitud directa'
   };
   const leads = JSON.parse(localStorage.getItem('clic_leads') || '[]');
   leads.push(lead);
   localStorage.setItem('clic_leads', JSON.stringify(leads));
 
   // Mensaje WhatsApp pre-rellenado
-  const waMsg = `🔧 *Nueva solicitud de reparación*
+  const waMsg = diag
+    ? '🔧 *Nueva solicitud de reparación*
 
-👤 *Cliente:* ${nombre}
-📞 *Teléfono:* ${telefono}
-📍 *Dirección:* ${direccion || 'No indicada'}
+👤 *Cliente:* ' + nombre + '
+📞 *Teléfono:* ' + telefono + '
+📍 *Dirección:* ' + (direccion || 'No indicada') + '
 
-🛠️ *Diagnóstico:* ${diag.titulo}
-⚠️ *Severidad:* ${diag.severidad}
-📋 *Descripción:* ${diag.causa}
-💬 *¿Necesita técnico?:* ${diag.necesita_tecnico}`;
+🛠️ *Diagnóstico:* ' + diag.titulo + '
+⚠️ *Severidad:* ' + diag.severidad + '
+📋 *Descripción:* ' + diag.causa + '
+💬 *¿Necesita técnico?:* ' + diag.necesita_tecnico
+    : '🔧 *Nueva solicitud de reparación*
 
-  const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(waMsg)}`;
+👤 *Cliente:* ' + nombre + '
+📞 *Teléfono:* ' + telefono + '
+📍 *Dirección:* ' + (direccion || 'No indicada') + '
+🔧 *Aparato:* ' + (aparato || 'No especificado');
+
+  const waUrl = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(waMsg);
 
   // Mostrar confirmación en el formulario
   const formEl = document.getElementById(formId);
