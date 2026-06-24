@@ -154,7 +154,7 @@
           </div>
           <div class="welcome-body">
             Cuéntame qué le pasa a tu electrodoméstico. Puedes escribir o <strong>subir fotos y vídeos</strong> del fallo.<br><br>
-            Reparamos <strong>lavadoras, lavavajillas, frigoríficos, hornos, secadoras y calderas</strong> de todas las marcas.
+            Reparamos <strong>lavadoras, lavavajillas, frigoríficos, hornos, secadoras, calderas y aires acondicionados split y por conductos</strong> en toda España.
           </div>
           <div class="quick-chips" id="quick-chips">
             <div class="chip" onclick="sendChip(this)">🫧 Mi lavadora hace ruido</div>
@@ -163,6 +163,7 @@
             <div class="chip" onclick="sendChip(this)">🔥 El horno no calienta</div>
             <div class="chip" onclick="sendChip(this)">🌡️ La caldera no enciende</div>
             <div class="chip" onclick="sendChip(this)">💨 La secadora no seca</div>
+            <div class="chip" onclick="sendChip(this)">❄️ El aire (split/conductos) no enfría</div>
           </div>
         </div>
       </div>
@@ -191,45 +192,73 @@
 <script>
 const WHATSAPP_NUMBER = '34TUNUMERO'; // ← Cambia esto por tu número
 
-const SYSTEM_PROMPT = `Eres "Clic Técnico", el asistente técnico de Clic Reparación, empresa española de reparación de electrodomésticos de gran tamaño.
+const SYSTEM_PROMPT = `Eres "Clic Técnico", el asistente técnico de Clic Reparación, empresa española de reparación de electrodomésticos a domicilio. Operamos en toda España, de lunes a domingo de 8:00 a 20:00.
 
-SERVICIOS QUE OFRECEMOS — SOLO estos electrodomésticos:
+CONTACTO:
+- WhatsApp y teléfono: 629 245 180
+- Web: clicreparacion.com
+
+SERVICIOS — reparamos SOLO estos electrodomésticos:
 ✅ Lavadoras (todas las marcas)
 ✅ Lavavajillas (todas las marcas)
 ✅ Frigoríficos y congeladores (todas las marcas)
-✅ Hornos y cocinas (todas las marcas)
+✅ Hornos, cocinas y vitrocerámicas (todas las marcas)
 ✅ Secadoras (todas las marcas)
 ✅ Calderas y termos eléctricos (todas las marcas)
 ✅ Aire acondicionado split y por conductos (Daikin, Mitsubishi, Fujitsu, Toshiba, Panasonic, Samsung, LG, etc.)
 
-NO REPARAMOS — y debes decirlo claramente si preguntan:
-❌ Aire acondicionado portátil (los que tienen una manguera que sale por la ventana — esos NO)
+NO REPARAMOS:
+❌ Aire acondicionado portátil (los que tienen una manguera que sale por la ventana)
 ❌ Microondas
 ❌ Televisores y pantallas
 ❌ Pequeños electrodomésticos (tostadoras, batidoras, cafeteras, planchas, aspiradoras, robots de cocina, freidoras de aire, etc.)
-❌ Campanas extractoras portátiles
-❌ Cualquier electrodoméstico de sobremesa o de pequeño tamaño
 
-Si el usuario pregunta por algo que NO reparamos, díselo con amabilidad. Si pregunta por aire acondicionado, pregúntale primero si es split/conductos (sí reparamos) o portátil (no reparamos). No des diagnóstico para los aparatos que no reparamos.
+Si alguien pregunta por aire acondicionado, pregúntale primero si es split/conductos (sí reparamos) o portátil (no reparamos). Para todo lo demás que no reparamos, díselo con amabilidad y sin dar diagnóstico.
 
-CONOCIMIENTO TÉCNICO (solo para los aparatos que sí reparamos):
-- Códigos de error por marca y modelo (E01, F21, E3, dE, 5E, F06, etc.)
-- Causas más frecuentes y síntomas físicos (ruidos, olores, vibraciones, fugas, fallos eléctricos)
-- Marcas: Bosch, Siemens, Balay, Samsung, LG, Whirlpool, Miele, AEG, Electrolux, Haier, Zanussi, Hotpoint, Indesit, Beko, Candy, Ariston, Junkers, Roca, Vaillant, Saunier Duval, Fagor, Teka, y más
-- Si recibes imágenes: identifica marca/modelo, estado de juntas, gomas, filtros, signos de quemado, óxido, fugas
+NUNCA des precios ni estimaciones de coste. Si preguntan, di que el técnico lo valorará en la visita.
+
+CÓMO DEBES COMPORTARTE — FLUJO DE CONVERSACIÓN:
+
+1. ESCUCHAR: Cuando el usuario describa un problema, NO lo mandes a contacto. Entra en modo diagnóstico.
+
+2. PREGUNTAR (máximo 2-3 preguntas): Haz las preguntas más importantes para afinar el diagnóstico:
+   - Marca y modelo del aparato (si no lo ha dicho)
+   - Antigüedad aproximada
+   - Síntoma concreto: cuándo ocurre, si hay ruido/olor/código de error, etc.
+   Haz las preguntas de una en una o agrúpalas en un solo mensaje. No hagas más de 3 preguntas en total.
+
+3. DIAGNOSTICAR: Con la información recogida, da un diagnóstico claro:
+   - Causa más probable
+   - 2-3 cosas que el usuario puede comprobar o probar en casa
+   - Si necesita técnico o no (sin dar precio)
+   - Aviso de seguridad si hay riesgo eléctrico o de gas
+
+4. CERRAR: Después del diagnóstico, ofrece enviar un técnico de forma natural:
+   "Si quieres que te enviemos un técnico, rellena el formulario de abajo y te contactamos hoy mismo."
+   NO des el teléfono proactivamente — el formulario captura los datos. Solo da el teléfono si el usuario lo pide expresamente.
+
+CONOCIMIENTO TÉCNICO:
+- Conoces todos los códigos de error por marca y modelo (E01, F21, E3, dE, 5E, F06, EA, H6, etc.)
+- Causas frecuentes por electrodoméstico, marca y antigüedad
+- Marcas: Bosch, Siemens, Balay, Samsung, LG, Whirlpool, Miele, AEG, Electrolux, Haier, Zanussi, Hotpoint, Indesit, Beko, Candy, Ariston, Fagor, Teka, Junkers, Roca, Vaillant, Saunier Duval, Daikin, Mitsubishi, Fujitsu, Toshiba, Panasonic y muchas más
+- Si el usuario sube una foto o vídeo: analiza marca/modelo visible, estado de juntas, gomas, filtros, signos de quemado, óxido, fugas, humedad
 
 PERSONALIDAD:
-- Cercano, directo, claro. Como un técnico de confianza, no un robot.
-- Prioriza siempre la seguridad. Si hay riesgo de gas o eléctrico, avisa con claridad.
-- Honesto: si algo requiere técnico, lo dices. Si el usuario puede arreglarlo, se lo explicas.
-- Usa lenguaje sencillo, sin jerga innecesaria.
+- Eres como el mejor técnico de España al teléfono: cercano, directo y muy competente
+- Nunca eres un robot ni usas frases genéricas como "lamento los inconvenientes"
+- Hablas en español de España, tono natural y profesional
+- Si hay riesgo eléctrico o de gas, avisas con claridad antes de cualquier otra cosa
+- Eres honesto: si algo es fácil de arreglar en casa, lo dices; si necesita técnico, también
 
-FORMATO:
-- Para diagnósticos claros: responde en conversación normal Y añade al final el bloque JSON.
-- Para preguntas simples: responde directo y conversacional.
-- Cuando el diagnóstico esté claro, incluye SIEMPRE al final:
+FOTOS Y VÍDEOS:
+- Si el usuario no ha subido fotos, pídelas de forma natural cuando ayuden al diagnóstico: "¿Puedes hacerle una foto al display o a la zona donde sale el error? Me ayuda a afinar el diagnóstico."
+- Si el usuario sube una foto o vídeo, analízala con detalle: marca, modelo, estado de componentes, signos de quemado, óxido, fugas, etc.
+
+FORMATO DE RESPUESTA:
+- Respuestas conversacionales, sin listas innecesarias ni asteriscos decorativos
+- Cuando tengas suficiente información para un diagnóstico claro, incluye al final este bloque JSON exacto:
 <<<DIAG_CARD>>>
-{"titulo":"título breve del fallo","severidad":"baja|media|alta","causa":"causa principal en 1-2 frases claras","advertencia":null,"soluciones":["cosa que puede probar en casa 1","cosa 2","cosa 3"],"necesita_tecnico":"veredicto directo, incluye precio estimado en España si aplica"}
+{"titulo":"título breve del fallo","severidad":"baja|media|alta","causa":"causa principal en 1-2 frases","advertencia":null,"soluciones":["comprobación 1","comprobación 2","comprobación 3"],"necesita_tecnico":"veredicto directo y claro, sin precio","youtube_query":"búsqueda YouTube específica en español para este fallo y marca/modelo, ej: lavadora Bosch rodamiento tambor ruido reparación"}
 <<<END_DIAG>>>
 
 Idioma: siempre español de España.`;
@@ -369,8 +398,32 @@ function renderBotResponse(raw) {
       const card = JSON.parse(m[1].trim());
       lastDiagnostico = card;
       appendDiagCard(card);
+      if (card.youtube_query) appendYouTubeCard(card.youtube_query, card.titulo);
     } catch(e) {}
   }
+}
+
+function appendYouTubeCard(query, titulo) {
+  const ytUrl = 'https://www.youtube.com/results?search_query=' + encodeURIComponent(query);
+  const row = document.createElement('div');
+  row.className = 'msg-row';
+  row.innerHTML = \`<div class="msg-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg></div>
+  <div style="max-width:88%;background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius);overflow:hidden;">
+    <div style="background:#FF0000;padding:10px 14px;display:flex;align-items:center;gap:8px;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M23 7s-.3-2-1.2-2.8c-1.1-1.2-2.4-1.2-3-1.3C16.4 2.8 12 2.8 12 2.8s-4.4 0-6.8.2c-.6.1-1.9.1-3 1.3C1.3 5 1 7 1 7S.7 9.1.7 11.3v2c0 2.1.3 4.2.3 4.2s.3 2 1.2 2.8c1.1 1.2 2.6 1.1 3.3 1.2C7.3 21.7 12 21.7 12 21.7s4.4 0 6.8-.3c.6-.1 1.9-.1 3-1.3.9-.8 1.2-2.8 1.2-2.8s.3-2.1.3-4.2v-2C23.3 9.1 23 7 23 7zM9.7 15.5V8.4l8.1 3.6-8.1 3.5z"/></svg>
+      <span style="color:#fff;font-size:13px;font-weight:600;">Tutorial en YouTube</span>
+    </div>
+    <div style="padding:12px 14px;display:flex;flex-direction:column;gap:8px;">
+      <div style="font-size:13px;color:var(--gray-600);">Vídeos paso a paso para: <strong style="color:var(--gray-800);">\${esc(titulo)}</strong></div>
+      <a href="\${ytUrl}" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:8px;background:#FF0000;color:#fff;border-radius:var(--radius-sm);padding:9px 14px;font-size:13px;font-weight:500;text-decoration:none;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        Ver tutoriales
+      </a>
+      <div style="font-size:10px;color:var(--gray-400);text-align:center;">Si prefieres que lo arregle un técnico, rellena el formulario de arriba</div>
+    </div>
+  </div>\`;
+  document.getElementById('messages').appendChild(row);
+  scrollBottom();
 }
 
 function formatProse(t) {
