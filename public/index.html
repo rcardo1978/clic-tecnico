@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clic Técnico · Diagnóstico Inteligente</title>
+<style>
+  :root {
+    --blue: #1D4ED8; --blue-light: #EFF6FF; --blue-dark: #1e3a8a;
+    --gray-50: #F9FAFB; --gray-100: #F3F4F6; --gray-200: #E5E7EB;
+    --gray-400: #9CA3AF; --gray-600: #4B5563; --gray-800: #1F2937;
+    --green-light: #D1FAE5; --green-dark: #065F46;
+    --amber-light: #FEF3C7; --amber-dark: #92400E;
+    --red-light: #FEE2E2; --red-dark: #991B1B;
+    --radius: 12px; --radius-sm: 8px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #F0F4FF; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
+
+  .top-bar { width: 100%; background: #fff; border-bottom: 1px solid var(--gray-200); padding: 12px 20px; display: flex; align-items: center; gap: 12px; position: sticky; top: 0; z-index: 100; }
+  .logo-mark { width: 36px; height: 36px; border-radius: 10px; background: var(--blue); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .logo-mark svg { width: 20px; height: 20px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .top-bar-text h1 { font-size: 15px; font-weight: 600; color: var(--gray-800); }
+  .top-bar-text p { font-size: 11px; color: var(--gray-400); }
+  .online-dot { width: 7px; height: 7px; background: #10B981; border-radius: 50%; margin-left: auto; flex-shrink: 0; }
+  .online-label { font-size: 11px; color: #10B981; font-weight: 500; }
+
+  .chat-wrap { width: 100%; max-width: 680px; flex: 1; display: flex; flex-direction: column; padding: 0 0 130px; }
+  .messages { flex: 1; padding: 20px 16px 0; display: flex; flex-direction: column; gap: 16px; }
+
+  .welcome-card { background: #fff; border: 1px solid var(--gray-200); border-radius: var(--radius); padding: 20px; display: flex; flex-direction: column; gap: 16px; }
+  .welcome-header { display: flex; align-items: center; gap: 12px; }
+  .avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--blue); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .avatar svg { width: 22px; height: 22px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; }
+  .welcome-header h2 { font-size: 15px; font-weight: 600; color: var(--gray-800); }
+  .welcome-header p { font-size: 11px; color: var(--gray-400); margin-top: 1px; }
+  .welcome-body { font-size: 14px; color: var(--gray-600); line-height: 1.6; }
+  .welcome-body strong { color: var(--gray-800); }
+  .quick-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip { border: 1px solid var(--gray-200); border-radius: 20px; padding: 6px 14px; font-size: 12px; color: var(--gray-600); cursor: pointer; background: var(--gray-50); transition: all 0.15s; white-space: nowrap; }
+  .chip:hover { background: var(--blue-light); border-color: #93C5FD; color: var(--blue); }
+
+  .msg-row { display: flex; gap: 10px; align-items: flex-end; }
+  .msg-row.user { flex-direction: row-reverse; }
+  .msg-avatar { width: 30px; height: 30px; border-radius: 50%; background: var(--blue); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .msg-avatar svg { width: 15px; height: 15px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; }
+  .bubble { max-width: 80%; padding: 10px 14px; border-radius: 16px; font-size: 14px; line-height: 1.55; }
+  .bubble.bot { background: #fff; border: 1px solid var(--gray-200); color: var(--gray-800); border-bottom-left-radius: 4px; }
+  .bubble.user { background: var(--blue); color: #fff; border-bottom-right-radius: 4px; }
+  .bubble.bot ul { padding-left: 16px; margin-top: 6px; }
+  .bubble.bot li { margin-bottom: 4px; font-size: 13px; }
+  .bubble.bot strong { color: var(--gray-800); }
+
+  .typing-bubble { background: #fff; border: 1px solid var(--gray-200); border-radius: 16px; border-bottom-left-radius: 4px; padding: 12px 16px; display: flex; gap: 5px; align-items: center; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--gray-400); animation: bounce 1.2s ease-in-out infinite; }
+  .dot:nth-child(2) { animation-delay: 0.2s; }
+  .dot:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes bounce { 0%,100%{transform:translateY(0);opacity:0.4} 50%{transform:translateY(-4px);opacity:1} }
+
+  .img-preview-bubble { max-width: 220px; border-radius: 12px; overflow: hidden; }
+  .img-preview-bubble img { width: 100%; display: block; }
+
+  /* DIAGNOSIS CARD */
+  .diag-card { background: #fff; border: 1px solid var(--gray-200); border-radius: var(--radius); overflow: hidden; max-width: 100%; }
+  .diag-head { padding: 12px 14px; border-bottom: 1px solid var(--gray-200); display: flex; align-items: center; gap: 10px; }
+  .diag-head svg { width: 18px; height: 18px; fill: none; stroke: var(--blue); stroke-width: 2; stroke-linecap: round; flex-shrink: 0; }
+  .diag-head-title { font-size: 14px; font-weight: 600; color: var(--gray-800); flex: 1; }
+  .sev { font-size: 10px; font-weight: 600; padding: 3px 9px; border-radius: 20px; }
+  .sev-low { background: var(--green-light); color: var(--green-dark); }
+  .sev-mid { background: var(--amber-light); color: var(--amber-dark); }
+  .sev-high { background: var(--red-light); color: var(--red-dark); }
+  .diag-body { padding: 12px 14px; display: flex; flex-direction: column; gap: 12px; }
+  .diag-section-title { font-size: 10px; font-weight: 600; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 5px; }
+  .diag-text { font-size: 13px; color: var(--gray-600); line-height: 1.55; }
+  .warn-strip { background: var(--amber-light); border-radius: 6px; padding: 8px 10px; font-size: 12px; color: var(--amber-dark); display: flex; gap: 7px; align-items: flex-start; }
+  .warn-strip svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; flex-shrink: 0; margin-top: 1px; }
+  .sol-item { display: flex; gap: 8px; font-size: 13px; color: var(--gray-600); line-height: 1.5; align-items: flex-start; margin-bottom: 6px; }
+  .sol-dot { width: 18px; height: 18px; border-radius: 50%; background: var(--blue-light); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .sol-dot svg { width: 11px; height: 11px; fill: none; stroke: var(--blue); stroke-width: 2.5; stroke-linecap: round; }
+
+  /* LEAD FORM */
+  .lead-form { padding: 14px; border-top: 1px solid var(--gray-200); display: flex; flex-direction: column; gap: 10px; }
+  .lead-form-title { font-size: 13px; font-weight: 600; color: var(--gray-800); }
+  .lead-form-sub { font-size: 12px; color: var(--gray-600); margin-top: -4px; }
+  .form-field { display: flex; flex-direction: column; gap: 4px; }
+  .form-field label { font-size: 11px; font-weight: 500; color: var(--gray-600); }
+  .form-field input { border: 1px solid var(--gray-200); border-radius: var(--radius-sm); padding: 9px 12px; font-size: 13px; color: var(--gray-800); background: var(--gray-50); outline: none; font-family: inherit; transition: border 0.15s; }
+  .form-field input:focus { border-color: #93C5FD; background: #fff; }
+  .form-field input::placeholder { color: var(--gray-400); }
+  .submit-btn { width: 100%; padding: 11px; border-radius: var(--radius-sm); background: var(--blue); color: #fff; font-size: 14px; font-weight: 500; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background 0.15s; }
+  .submit-btn:hover { background: var(--blue-dark); }
+  .submit-btn svg { width: 16px; height: 16px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; }
+  .privacy-note { font-size: 10px; color: var(--gray-400); text-align: center; }
+
+  /* SUCCESS STATE */
+  .success-card { background: var(--green-light); border-radius: var(--radius-sm); padding: 14px; display: flex; flex-direction: column; gap: 8px; align-items: center; text-align: center; }
+  .success-card svg { width: 32px; height: 32px; fill: none; stroke: var(--green-dark); stroke-width: 2; stroke-linecap: round; }
+  .success-card h3 { font-size: 14px; font-weight: 600; color: var(--green-dark); }
+  .success-card p { font-size: 12px; color: #065F46; }
+  .wa-btn { display: flex; align-items: center; justify-content: center; gap: 8px; background: #25D366; color: #fff; border-radius: var(--radius-sm); padding: 10px 16px; font-size: 13px; font-weight: 500; text-decoration: none; margin-top: 4px; }
+  .wa-btn svg { width: 16px; height: 16px; fill: #fff; }
+
+  /* INPUT */
+  .input-area { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; border-top: 1px solid var(--gray-200); padding: 12px 16px 24px; display: flex; flex-direction: column; align-items: center; z-index: 100; }
+  .input-inner { width: 100%; max-width: 680px; display: flex; flex-direction: column; gap: 8px; }
+  .attach-previews { display: flex; gap: 8px; flex-wrap: wrap; }
+  .attach-thumb { position: relative; width: 56px; height: 56px; border-radius: var(--radius-sm); overflow: hidden; border: 1px solid var(--gray-200); flex-shrink: 0; }
+  .attach-thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .remove-thumb { position: absolute; top: 2px; right: 2px; width: 16px; height: 16px; border-radius: 50%; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; cursor: pointer; color: #fff; font-size: 10px; font-weight: 700; }
+  .input-row { display: flex; gap: 8px; align-items: flex-end; }
+  .attach-btn { width: 40px; height: 40px; border-radius: var(--radius-sm); border: 1px solid var(--gray-200); background: var(--gray-50); cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.15s; }
+  .attach-btn:hover { background: var(--blue-light); border-color: #93C5FD; }
+  .attach-btn svg { width: 18px; height: 18px; fill: none; stroke: var(--gray-600); stroke-width: 2; stroke-linecap: round; }
+  .attach-btn:hover svg { stroke: var(--blue); }
+  .msg-input { flex: 1; border: 1px solid var(--gray-200); border-radius: var(--radius-sm); padding: 10px 12px; font-size: 14px; color: var(--gray-800); background: var(--gray-50); resize: none; font-family: inherit; line-height: 1.4; max-height: 120px; outline: none; transition: border 0.15s; }
+  .msg-input:focus { border-color: #93C5FD; background: #fff; }
+  .msg-input::placeholder { color: var(--gray-400); }
+  .send-btn { width: 40px; height: 40px; border-radius: var(--radius-sm); background: var(--blue); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.15s; }
+  .send-btn:hover { background: var(--blue-dark); }
+  .send-btn svg { width: 18px; height: 18px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; }
+  .hint { font-size: 10px; color: var(--gray-400); text-align: center; }
+  .ts { font-size: 10px; color: var(--gray-400); text-align: center; padding: 4px 0; }
+  #file-input { display: none; }
+  @media (max-width: 480px) { .bubble { max-width: 88%; } }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div class="logo-mark">
+    <svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+  </div>
+  <div class="top-bar-text">
+    <h1>Clic Técnico</h1>
+    <p>Diagnóstico IA · Clic Reparación</p>
+  </div>
+  <div class="online-dot"></div>
+  <span class="online-label">Online</span>
+</div>
+
+<div class="chat-wrap">
+  <div class="messages" id="messages">
+    <div class="ts">Hoy</div>
+    <div class="msg-row">
+      <div class="msg-avatar"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg></div>
+      <div style="flex:1">
+        <div class="welcome-card">
+          <div class="welcome-header">
+            <div class="avatar"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg></div>
+            <div>
+              <h2>Hola, soy Clic Técnico 👋</h2>
+              <p>Asistente técnico de Clic Reparación · 24/7</p>
+            </div>
+          </div>
+          <div class="welcome-body">
+            Cuéntame qué le pasa a tu electrodoméstico. Puedes escribir o <strong>subir fotos y vídeos</strong> del fallo.<br><br>
+            Reparamos <strong>lavadoras, lavavajillas, frigoríficos, hornos, secadoras y calderas</strong> de todas las marcas.
+          </div>
+          <div class="quick-chips" id="quick-chips">
+            <div class="chip" onclick="sendChip(this)">🫧 Mi lavadora hace ruido</div>
+            <div class="chip" onclick="sendChip(this)">❄️ El frigo no enfría</div>
+            <div class="chip" onclick="sendChip(this)">💧 Lavavajillas pierde agua</div>
+            <div class="chip" onclick="sendChip(this)">🔥 El horno no calienta</div>
+            <div class="chip" onclick="sendChip(this)">🌡️ La caldera no enciende</div>
+            <div class="chip" onclick="sendChip(this)">💨 La secadora no seca</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="input-area">
+  <div class="input-inner">
+    <div class="attach-previews" id="attach-previews"></div>
+    <div class="input-row">
+      <button class="attach-btn" onclick="document.getElementById('file-input').click()" title="Adjuntar foto o vídeo">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      </button>
+      <textarea class="msg-input" id="msg-input" rows="1" placeholder="Describe el problema o sube una foto/vídeo..." oninput="autoResize(this)" onkeydown="handleKey(event)"></textarea>
+      <button class="send-btn" onclick="sendMessage()">
+        <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+    <div class="hint">Soporta JPG, PNG, MP4, MOV · máx. 20MB</div>
+  </div>
+</div>
+
+<input type="file" id="file-input" accept="image/*,video/*" multiple onchange="handleFiles(event)">
+
+<script>
+const WHATSAPP_NUMBER = '34TUNUMERO'; // ← Cambia esto por tu número
+
+const SYSTEM_PROMPT = `Eres "Clic Técnico", el asistente técnico de Clic Reparación, empresa española de reparación de electrodomésticos de gran tamaño.
+
+SERVICIOS QUE OFRECEMOS — SOLO estos electrodomésticos:
+✅ Lavadoras (todas las marcas)
+✅ Lavavajillas (todas las marcas)
+✅ Frigoríficos y congeladores (todas las marcas)
+✅ Hornos y cocinas (todas las marcas)
+✅ Secadoras (todas las marcas)
+✅ Calderas y termos eléctricos (todas las marcas)
+
+NO REPARAMOS — y debes decirlo claramente si preguntan:
+❌ Aire acondicionado portátil
+❌ Microondas
+❌ Televisores y pantallas
+❌ Pequeños electrodomésticos (tostadoras, batidoras, cafeteras, planchas, aspiradoras, robots de cocina, freidoras de aire, etc.)
+❌ Campanas extractoras portátiles
+❌ Cualquier electrodoméstico de sobremesa o de pequeño tamaño
+
+Si el usuario pregunta por algo que NO reparamos, díselo con amabilidad y claridad: "Lo sentimos, ese tipo de aparato no entra en nuestro servicio. Nos especializamos en electrodomésticos de línea blanca: lavadoras, lavavajillas, frigoríficos, hornos, secadoras y calderas." No des diagnóstico para esos aparatos.
+
+CONOCIMIENTO TÉCNICO (solo para los aparatos que sí reparamos):
+- Códigos de error por marca y modelo (E01, F21, E3, dE, 5E, F06, etc.)
+- Causas más frecuentes y síntomas físicos (ruidos, olores, vibraciones, fugas, fallos eléctricos)
+- Marcas: Bosch, Siemens, Balay, Samsung, LG, Whirlpool, Miele, AEG, Electrolux, Haier, Zanussi, Hotpoint, Indesit, Beko, Candy, Ariston, Junkers, Roca, Vaillant, Saunier Duval, Fagor, Teka, y más
+- Si recibes imágenes: identifica marca/modelo, estado de juntas, gomas, filtros, signos de quemado, óxido, fugas
+
+PERSONALIDAD:
+- Cercano, directo, claro. Como un técnico de confianza, no un robot.
+- Prioriza siempre la seguridad. Si hay riesgo de gas o eléctrico, avisa con claridad.
+- Honesto: si algo requiere técnico, lo dices. Si el usuario puede arreglarlo, se lo explicas.
+- Usa lenguaje sencillo, sin jerga innecesaria.
+
+FORMATO:
+- Para diagnósticos claros: responde en conversación normal Y añade al final el bloque JSON.
+- Para preguntas simples: responde directo y conversacional.
+- Cuando el diagnóstico esté claro, incluye SIEMPRE al final:
+<<<DIAG_CARD>>>
+{"titulo":"título breve del fallo","severidad":"baja|media|alta","causa":"causa principal en 1-2 frases claras","advertencia":null,"soluciones":["cosa que puede probar en casa 1","cosa 2","cosa 3"],"necesita_tecnico":"veredicto directo, incluye precio estimado en España si aplica"}
+<<<END_DIAG>>>
+
+Idioma: siempre español de España.`;
+
+let conversationHistory = [];
+let pendingFiles = [];
+let isThinking = false;
+let lastDiagnostico = null;
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+}
+
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+}
+
+function handleFiles(e) {
+  Array.from(e.target.files).forEach(f => {
+    if (f.size > 20 * 1024 * 1024) { alert('Archivo demasiado grande (máx. 20MB)'); return; }
+    const reader = new FileReader();
+    reader.onload = ev => {
+      pendingFiles.push({ name: f.name, type: f.type, dataUrl: ev.target.result, isVideo: f.type.startsWith('video/') });
+      renderPreviews();
+    };
+    reader.readAsDataURL(f);
+  });
+  e.target.value = '';
+}
+
+function renderPreviews() {
+  document.getElementById('attach-previews').innerHTML = pendingFiles.map((f, i) => `
+    <div class="attach-thumb">
+      ${f.isVideo
+        ? `<div style="width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#f3f4f6;font-size:9px;color:#6B7280;gap:2px;">▶<span>Vídeo</span></div>`
+        : `<img src="${f.dataUrl}">`}
+      <div class="remove-thumb" onclick="removeFile(${i})">✕</div>
+    </div>`).join('');
+}
+
+function removeFile(i) { pendingFiles.splice(i, 1); renderPreviews(); }
+
+async function sendChip(el) {
+  const text = el.textContent.replace(/^[\p{Emoji}\s]+/u, '').trim();
+  document.getElementById('quick-chips').style.display = 'none';
+  await sendMessage(text);
+}
+
+async function sendMessage(overrideText) {
+  if (isThinking) return;
+  const input = document.getElementById('msg-input');
+  const text = overrideText || input.value.trim();
+  const hasFiles = pendingFiles.length > 0;
+  if (!text && !hasFiles) return;
+
+  const filesToSend = [...pendingFiles];
+  pendingFiles = [];
+  renderPreviews();
+  if (!overrideText) { input.value = ''; input.style.height = 'auto'; }
+
+  appendUserMessage(text, filesToSend);
+  conversationHistory.push({ role: 'user', content: buildUserContent(text, filesToSend) });
+
+  isThinking = true;
+  const typingId = appendTyping();
+
+  try {
+    const resp = await fetch('/.netlify/functions/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ system: SYSTEM_PROMPT, messages: conversationHistory })
+    });
+    const data = await resp.json();
+    const raw = (data.content || []).map(b => b.text || '').join('');
+    conversationHistory.push({ role: 'assistant', content: raw });
+    removeTyping(typingId);
+    renderBotResponse(raw);
+  } catch(err) {
+    removeTyping(typingId);
+    appendBotBubble('No pude conectar con el servidor. Comprueba tu conexión e inténtalo de nuevo.');
+  }
+  isThinking = false;
+}
+
+function buildUserContent(text, files) {
+  if (!files.length) return text || ' ';
+  const parts = [];
+  files.forEach(f => {
+    if (f.isVideo) {
+      parts.push({ type: 'text', text: `[El usuario adjunta un vídeo: ${f.name}]` });
+    } else {
+      parts.push({ type: 'image', source: { type: 'base64', media_type: f.type || 'image/jpeg', data: f.dataUrl.split(',')[1] } });
+    }
+  });
+  parts.push({ type: 'text', text: text || 'Analiza esta imagen y dime qué fallo detectas.' });
+  return parts;
+}
+
+function appendUserMessage(text, files) {
+  const msgs = document.getElementById('messages');
+  const row = document.createElement('div');
+  row.className = 'msg-row user';
+  let html = '';
+  if (files.length) {
+    html += `<div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;margin-bottom:6px;">`;
+    files.forEach(f => {
+      if (f.isVideo) html += `<div style="width:80px;height:60px;border-radius:8px;background:#1D4ED8;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:3px;font-size:9px;color:rgba(255,255,255,0.8);">▶<span>Vídeo</span></div>`;
+      else html += `<div class="img-preview-bubble"><img src="${f.dataUrl}"></div>`;
+    });
+    html += '</div>';
+  }
+  if (text) html += `<div class="bubble user">${esc(text)}</div>`;
+  row.innerHTML = html;
+  msgs.appendChild(row);
+  scrollBottom();
+}
+
+let tc = 0;
+function appendTyping() {
+  const id = 'ty-' + (++tc);
+  const row = document.createElement('div');
+  row.className = 'msg-row'; row.id = id;
+  row.innerHTML = `<div class="msg-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg></div>
+  <div class="typing-bubble"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>`;
+  document.getElementById('messages').appendChild(row);
+  scrollBottom(); return id;
+}
+function removeTyping(id) { document.getElementById(id)?.remove(); }
+
+function renderBotResponse(raw) {
+  const m = raw.match(/<<<DIAG_CARD>>>([\s\S]*?)<<<END_DIAG>>>/);
+  const prose = raw.replace(/<<<DIAG_CARD>>>[\s\S]*?<<<END_DIAG>>>/g, '').trim();
+  if (prose) appendBotBubble(formatProse(prose));
+  if (m) {
+    try {
+      const card = JSON.parse(m[1].trim());
+      lastDiagnostico = card;
+      appendDiagCard(card);
+    } catch(e) {}
+  }
+}
+
+function formatProse(t) {
+  return t
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/^- (.+)$/gm, '<li>$1</li>')
+    .replace(/(<li>[\s\S]*?<\/li>)+/g, s => `<ul>${s}</ul>`)
+    .replace(/\n\n/g, '</p><p>')
+    .replace(/\n/g, '<br>')
+    .replace(/^(.+)$/, '<p>$1</p>');
+}
+
+function appendBotBubble(html) {
+  const row = document.createElement('div');
+  row.className = 'msg-row';
+  row.innerHTML = `<div class="msg-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg></div>
+  <div class="bubble bot">${html}</div>`;
+  document.getElementById('messages').appendChild(row);
+  scrollBottom();
+}
+
+function appendDiagCard(c) {
+  const sevMap = { baja: ['sev-low','Fallo leve'], media: ['sev-mid','Fallo moderado'], alta: ['sev-high','Fallo grave'] };
+  const [sc, st] = sevMap[c.severidad] || sevMap.media;
+  const sols = (c.soluciones || []).map(s => `
+    <div class="sol-item">
+      <div class="sol-dot"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <span>${esc(s)}</span>
+    </div>`).join('');
+  const warn = c.advertencia ? `
+    <div class="warn-strip">
+      <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      ${esc(c.advertencia)}
+    </div>` : '';
+
+  const formId = 'form-' + Date.now();
+  const row = document.createElement('div');
+  row.className = 'msg-row';
+  row.innerHTML = `
+  <div class="msg-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg></div>
+  <div class="diag-card" style="max-width:88%;flex:1">
+    <div class="diag-head">
+      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      <span class="diag-head-title">${esc(c.titulo)}</span>
+      <span class="sev ${sc}">${st}</span>
+    </div>
+    <div class="diag-body">
+      <div>
+        <div class="diag-section-title">Posible causa</div>
+        <div class="diag-text">${esc(c.causa)}</div>
+      </div>
+      ${warn}
+      <div>
+        <div class="diag-section-title">Lo que puedes probar</div>
+        ${sols}
+      </div>
+      <div>
+        <div class="diag-section-title">¿Necesita técnico?</div>
+        <div class="diag-text">${esc(c.necesita_tecnico)}</div>
+      </div>
+    </div>
+
+    <div class="lead-form" id="${formId}">
+      <div class="lead-form-title">📋 ¿Quieres que te enviemos un técnico?</div>
+      <div class="lead-form-sub">Déjanos tus datos y te contactamos en menos de 2 horas.</div>
+      <div class="form-field">
+        <label>Nombre</label>
+        <input type="text" id="${formId}-nombre" placeholder="Tu nombre completo">
+      </div>
+      <div class="form-field">
+        <label>Teléfono</label>
+        <input type="tel" id="${formId}-telefono" placeholder="612 345 678">
+      </div>
+      <div class="form-field">
+        <label>Dirección</label>
+        <input type="text" id="${formId}-direccion" placeholder="Calle, número, ciudad">
+      </div>
+      <button class="submit-btn" onclick="submitLead('${formId}', ${JSON.stringify(c).replace(/'/g,'&#39;')})">
+        <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 012 1.18 2 2 0 014 1h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 8.91a16 16 0 006.23 6.23l1.22-1.22a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg>
+        Solicitar técnico
+      </button>
+      <div class="privacy-note">🔒 Tus datos solo se usan para gestionar tu reparación</div>
+    </div>
+  </div>`;
+  document.getElementById('messages').appendChild(row);
+  scrollBottom();
+}
+
+function submitLead(formId, diag) {
+  const nombre = document.getElementById(formId + '-nombre').value.trim();
+  const telefono = document.getElementById(formId + '-telefono').value.trim();
+  const direccion = document.getElementById(formId + '-direccion').value.trim();
+
+  if (!nombre || !telefono) {
+    alert('Por favor, introduce al menos tu nombre y teléfono.');
+    return;
+  }
+
+  // Guardar lead en localStorage como backup
+  const lead = {
+    fecha: new Date().toISOString(),
+    nombre, telefono, direccion,
+    diagnostico: diag.titulo,
+    severidad: diag.severidad,
+    descripcion: diag.causa,
+    necesita_tecnico: diag.necesita_tecnico
+  };
+  const leads = JSON.parse(localStorage.getItem('clic_leads') || '[]');
+  leads.push(lead);
+  localStorage.setItem('clic_leads', JSON.stringify(leads));
+
+  // Mensaje WhatsApp pre-rellenado
+  const waMsg = `🔧 *Nueva solicitud de reparación*
+
+👤 *Cliente:* ${nombre}
+📞 *Teléfono:* ${telefono}
+📍 *Dirección:* ${direccion || 'No indicada'}
+
+🛠️ *Diagnóstico:* ${diag.titulo}
+⚠️ *Severidad:* ${diag.severidad}
+📋 *Descripción:* ${diag.causa}
+💬 *¿Necesita técnico?:* ${diag.necesita_tecnico}`;
+
+  const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(waMsg)}`;
+
+  // Mostrar confirmación en el formulario
+  const formEl = document.getElementById(formId);
+  formEl.innerHTML = `
+    <div class="success-card">
+      <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      <h3>¡Solicitud recibida!</h3>
+      <p>Te llamaremos en menos de 2 horas al <strong>${telefono}</strong>.</p>
+      <a href="${waUrl}" target="_blank" class="wa-btn">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Confirmar por WhatsApp
+      </a>
+    </div>`;
+
+  scrollBottom();
+
+  // También abre WhatsApp automáticamente
+  setTimeout(() => { window.open(waUrl, '_blank'); }, 800);
+}
+
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function scrollBottom() {
+  setTimeout(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }), 80);
+}
+</script>
+</body>
+</html>
