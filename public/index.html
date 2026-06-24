@@ -285,6 +285,11 @@ function buildForm(fid,c){
 function showLeadForm(){
   var fid='f'+Date.now();
   var row=document.createElement('div');row.className='msg-row';
+  row.innerHTML=av()+'<div class="diag-card" style="max-width:88%;flex:1"><div class="lead-form" id="'+fid+'"><div class="lead-form-title">Solicitar tecnico</div><div class="lead-form-sub">Dejanos tus datos y te contactamos hoy mismo.</div><div class="form-field"><label>Nombre</label><input type="text" id="'+fid+'-n" placeholder="Tu nombre completo"></div><div class="form-field"><label>Telefono</label><input type="tel" id="'+fid+'-t" placeholder="612 345 678"></div><div class="form-field"><label>Direccion</label><input type="text" id="'+fid+'-d" placeholder="Calle, numero, ciudad"></div><button class="submit-btn" onclick="doSubmit(\''+fid+'\',\'\')"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 012 1.18 2 2 0 014 1h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 8.91a16 16 0 006.23 6.23l1.22-1.22a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg>Solicitar tecnico</button><div class="privacy-note">Tus datos solo se usan para gestionar tu reparacion</div></div></div>';
+  document.getElementById('messages').appendChild(row);scrollB();
+}
+  var fid='f'+Date.now();
+  var row=document.createElement('div');row.className='msg-row';
   row.innerHTML=av()+'<div class="diag-card" style="max-width:88%;flex:1">'+buildForm(fid,null)+'</div>';
   document.getElementById('messages').appendChild(row);scrollB();
 }
