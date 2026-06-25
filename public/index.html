@@ -276,7 +276,7 @@ function addDiagCard(c){
 
 function buildForm(fid,c){
   var cj=c?encodeURIComponent(JSON.stringify(c)):'';
-  return '<div class="lead-form" id="'+fid+'"><div class="lead-form-title">Solicitar tecnico</div><div class="lead-form-sub">Dejanos tus datos y te contactamos hoy mismo.</div><div class="form-field"><label>Nombre</label><input type="text" id="'+fid+'-n" placeholder="Tu nombre completo"></div><div class="form-field"><label>Telefono</label><input type="tel" id="'+fid+'-t" placeholder="612 345 678"></div><div class="form-field"><label>Direccion</label><input type="text" id="'+fid+'-d" placeholder="Calle, numero, ciudad"></div><button class="submit-btn" onclick="doSubmit(\''+fid+'\',\''+cj+'\')"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 012 1.18 2 2 0 014 1h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 8.91a16 16 0 006.23 6.23l1.22-1.22a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg>Solicitar tecnico</button><div class="privacy-note">Tus datos solo se usan para gestionar tu reparacion</div></div>';
+  return '<div class="lead-form" id="'+fid+'"><div class="lead-form-title">Solicitar tecnico</div><div class="lead-form-sub">Dejanos tus datos y te contactamos hoy mismo.</div><div class="form-field"><label>Nombre</label><input type="text" id="'+fid+'-n" placeholder="Tu nombre completo"></div><div class="form-field"><label>Telefono</label><input type="tel" id="'+fid+'-t" placeholder="612 345 678"></div><div class="form-field"><label>Direccion</label><input type="text" id="'+fid+'-d" placeholder="Calle, numero, ciudad"></div><div class="form-field"><label>Email</label><input type="email" id="'+fid+'-e" placeholder="tu@email.com"></div><button class="submit-btn" onclick="doSubmit(\''+fid+'\',\''+cj+'\')"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 012 1.18 2 2 0 014 1h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 8.91a16 16 0 006.23 6.23l1.22-1.22a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg>Solicitar tecnico</button><div class="privacy-note">Tus datos solo se usan para gestionar tu reparacion</div></div>';
 }
 
 function showLeadForm(){
@@ -290,6 +290,7 @@ function doSubmit(fid,cj){
   var nombre=document.getElementById(fid+'-n').value.trim();
   var tel=document.getElementById(fid+'-t').value.trim();
   var dir=document.getElementById(fid+'-d').value.trim();
+  var email=document.getElementById(fid+'-e').value.trim();
   if(!nombre||!tel){alert('Introduce tu nombre y telefono.');return;}
   var c=null;try{c=JSON.parse(decodeURIComponent(cj));}catch(e){}
   var msg='Nueva solicitud de reparacion\n\nCliente: '+nombre+'\nTelefono: '+tel+'\nDireccion: '+(dir||'No indicada');
@@ -298,7 +299,7 @@ function doSubmit(fid,cj){
   var leads=[];try{leads=JSON.parse(localStorage.getItem('clic_leads')||'[]');}catch(e){}
   leads.push({fecha:new Date().toISOString(),nombre:nombre,telefono:tel,direccion:dir,diagnostico:c?c.titulo:''});
   try{localStorage.setItem('clic_leads',JSON.stringify(leads));}catch(e){}
-  fetch(WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({fecha:new Date().toISOString(),nombre:nombre,telefono:tel,direccion:dir,diagnostico:c?c.titulo:'Sin diagnostico',causa:c?c.causa:'',severidad:c?c.severidad:''})}).catch(function(){});
+  fetch(WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({fecha:new Date().toISOString(),nombre:nombre,telefono:tel,email:email,direccion:dir,diagnostico:c?c.titulo:'Sin diagnostico',causa:c?c.causa:'',severidad:c?c.severidad:''})}).catch(function(){});
   var el=document.getElementById(fid);
   el.innerHTML='<div class="success-card"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><h3>Solicitud enviada!</h3><p>Un tecnico te llamara hoy al <strong>'+esc(tel)+'</strong>.</p><a href="'+waUrl+'" target="_blank" class="wa-btn">Abrir WhatsApp</a></div>';
   scrollB();
